@@ -8,8 +8,8 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +19,7 @@ public class AllMusicFabric implements ModInitializer {
     public static MinecraftServer server;
     public static final Logger LOGGER = LoggerFactory.getLogger("AllMusic_Server");
 
-    public static final Identifier ID = Identifier.of("allmusic", "channel");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("allmusic", "channel");
 
     @Override
     public void onInitialize() {

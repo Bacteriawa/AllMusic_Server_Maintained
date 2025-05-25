@@ -4,10 +4,9 @@
   "package": "com.coloryr.allmusic.server.mixin",
   "compatibilityLevel": "JAVA_21",
   "server": [
-
   ],
   "mixins": [
-    "ServerPlayerMixin"
+    "PlayerListMixin"
   ],
   "injectors": {
     "defaultRequire": 1

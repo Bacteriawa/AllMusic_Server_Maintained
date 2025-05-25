@@ -3,22 +3,22 @@ package com.coloryr.allmusic.server.side.fabric.event;
 import com.coloryr.allmusic.server.core.objs.music.MusicObj;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResult;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 
 public interface MusicAddEvent {
     Event<MusicAddEvent> EVENT = EventFactory.createArrayBacked(MusicAddEvent.class,
             (listeners) -> (player, music) -> {
                 for (MusicAddEvent listener : listeners) {
-                    ActionResult result = listener.interact(player, music);
+                    InteractionResult result = listener.interact(player, music);
 
-                    if (result != ActionResult.PASS) {
+                    if (result != InteractionResult.PASS) {
                         return result;
                     }
                 }
 
-                return ActionResult.PASS;
+                return InteractionResult.PASS;
             });
 
-    ActionResult interact(PlayerEntity player, MusicObj music);
+    InteractionResult interact(Player player, MusicObj music);
 }

@@ -12,10 +12,10 @@ import com.coloryr.allmusic.server.core.side.BaseSide;
 import com.coloryr.allmusic.server.side.fabric.event.MusicAddEvent;
 import com.coloryr.allmusic.server.side.fabric.event.MusicPlayEvent;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
 
 import java.io.File;
 import java.util.Collection;
@@ -37,14 +37,14 @@ public class SideFabric extends BaseSide {
 
     @Override
     public boolean checkPermission(Object player) {
-        ServerCommandSource source = (ServerCommandSource) player;
-        return source.hasPermissionLevel(2);
+        CommandSourceStack source = (CommandSourceStack) player;
+        return source.hasPermission(2);
     }
 
     @Override
     public boolean isPlayer(Object player) {
-        ServerCommandSource source = (ServerCommandSource) player;
-        return source.isExecutedByPlayer();
+        CommandSourceStack source = (CommandSourceStack) player;
+        return source.isPlayer();
     }
 
     @Override
@@ -54,7 +54,7 @@ public class SideFabric extends BaseSide {
 
     @Override
     public boolean needPlay(boolean islist) {
-        for (var player : AllMusicFabric.server.getPlayerManager().getPlayerList()) {
+        for (var player : AllMusicFabric.server.getPlayerList().getPlayers()) {
             if (!AllMusic.isSkip(player.getName().getString(), null, false, islist)) {
                 return true;
             }
@@ -64,12 +64,12 @@ public class SideFabric extends BaseSide {
 
     @Override
     public Collection<?> getPlayers() {
-        return AllMusicFabric.server.getPlayerManager().getPlayerList();
+        return AllMusicFabric.server.getPlayerList().getPlayers();
     }
 
     @Override
     public String getPlayerName(Object player) {
-        if (player instanceof ServerPlayerEntity player1) {
+        if (player instanceof ServerPlayer player1) {
             return player1.getName().getString();
         }
 
@@ -83,19 +83,19 @@ public class SideFabric extends BaseSide {
 
     @Override
     public void send(Object player, ComType type, String data, int data1) {
-        if (player instanceof ServerPlayerEntity player1) {
+        if (player instanceof ServerPlayer player1) {
             send(player1, new PackPayload(type, data, data1));
         }
     }
 
     @Override
     public Object getPlayer(String player) {
-        return AllMusicFabric.server.getPlayerManager().getPlayer(player);
+        return AllMusicFabric.server.getPlayerList().getPlayerByName(player);
     }
 
     @Override
     public void sendBar(Object player, String data) {
-        if (player instanceof ServerPlayerEntity player1) {
+        if (player instanceof ServerPlayer player1) {
             FabricApi.sendBar(player1, data);
         }
     }
@@ -110,9 +110,9 @@ public class SideFabric extends BaseSide {
         if (message == null || message.isEmpty()) {
             return;
         }
-        for (var player : AllMusicFabric.server.getPlayerManager().getPlayerList()) {
+        for (var player : AllMusicFabric.server.getPlayerList().getPlayers()) {
             if (!AllMusic.isSkip(player.getName().getString(), null, false)) {
-                player.sendMessage(Text.of(message), false);
+                player.displayClientMessage(Component.nullToEmpty(message), false);
             }
         }
     }
@@ -130,8 +130,8 @@ public class SideFabric extends BaseSide {
         if (message == null || message.isEmpty()) {
             return;
         }
-        ServerCommandSource source = (ServerCommandSource) obj;
-        source.sendMessage(Text.of(message));
+        CommandSourceStack source = (CommandSourceStack) obj;
+        source.sendSystemMessage(Component.nullToEmpty(message));
     }
 
     @Override
@@ -152,16 +152,16 @@ public class SideFabric extends BaseSide {
 
     @Override
     public boolean onMusicPlay(SongInfoObj obj) {
-        return MusicPlayEvent.EVENT.invoker().interact(obj) != ActionResult.PASS;
+        return MusicPlayEvent.EVENT.invoker().interact(obj) != InteractionResult.PASS;
     }
 
     @Override
     public boolean onMusicAdd(Object obj, MusicObj music) {
-        ServerCommandSource source = (ServerCommandSource) obj;
-        return MusicAddEvent.EVENT.invoker().interact(source.getPlayer(), music) != ActionResult.PASS;
+        CommandSourceStack source = (CommandSourceStack) obj;
+        return MusicAddEvent.EVENT.invoker().interact(source.getPlayer(), music) != InteractionResult.PASS;
     }
 
-    private void send(ServerPlayerEntity players, PackPayload data) {
+    private void send(ServerPlayer players, PackPayload data) {
         if (players == null)
             return;
         try {
