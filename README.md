@@ -20,7 +20,7 @@ AllMusic_Server 的维护版本, 提供 Bug 修复和新版本 Minecraft 支持.
 注：需要配合[客户端Mod](https://github.com/HaHaWTH/AllMusic_Client_Maintained)使用  
 **不兼容旧版客户端Mod，需要新版客户端Mod**
 
-Client 暂未 public, 等 1.21.6 更新
+Client 等 1.21.6 看情况更新, 原仓库 [AllMusic_Client](https://github.com/Coloryr/AllMusic_Client)
 
 ## 下载
 登录github账户  
