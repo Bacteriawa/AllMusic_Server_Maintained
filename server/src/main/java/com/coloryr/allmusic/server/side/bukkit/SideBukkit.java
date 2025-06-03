@@ -145,8 +145,8 @@ public class SideBukkit extends BaseSide {
 
     @Override
     public Object getPlayer(String player) {
-        return null;
-    }
+        return Bukkit.getPlayer(player);
+    } // TODO: Check logic if this need to be replaced by getPlayerExact
 
     @Override
     public void sendBar(Object player, String message) {
