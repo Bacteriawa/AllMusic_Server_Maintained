@@ -44,6 +44,10 @@ repositories {
         name 'velocity'
         url 'https://nexus.velocitypowered.com/repository/maven-public/'
     }
+    maven {
+    name = "menthamc"
+    url = "https://repo.menthamc.com/repository/maven-public/"
+}
 }
 
 dependencies {
@@ -51,7 +55,7 @@ dependencies {
     //implementation 'mysql:mysql-connector-java:8.0.31'
 
     compileOnly 'io.netty:netty-all:4.1.109.Final'
-    compileOnly 'dev.folia:folia-api:+'
+    compileOnly 'dev.bacteriawa.mint:mint-api:+'
     compileOnly "com.github.MilkBowl:VaultAPI:+"
     compileOnly 'me.clip:placeholderapi:+'
     //compileOnly 'net.citizensnpcs:citizens-main:2.0.30-SNAPSHOT'
